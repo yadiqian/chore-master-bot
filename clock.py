@@ -70,6 +70,6 @@ def chore_switch():
 
 if __name__ == '__main__':
     sched = BlockingScheduler(timezone='EST')
-    sched.add_job(chore_switch, 'cron', day_of_week='sun', hour=1, minute=16)
+    sched.add_job(chore_switch, 'cron', day_of_week='sun', hour=1, minute=27)
 
 sched.start()
