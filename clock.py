@@ -1,4 +1,4 @@
-from apscheduler.schedulers import Scheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
 import requests
 import os
 import psycopg2
@@ -69,7 +69,7 @@ def chore_switch():
     conn.close()
 
 if __name__ == '__main__':
-    sched = Scheduler(timezone='EST')
-    sched.add_job(chore_switch, 'cron', day_of_week='sun', hour=0, minute=20)
+    sched = BlockingScheduler(timezone='EST')
+    sched.add_job(chore_switch, 'cron', day_of_week='sun', hour=1, minunte=2)
 
 sched.start()
