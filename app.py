@@ -104,7 +104,7 @@ def webhook():
               for chore in results:
                   message += chore[0] + '\n'
 
-        sendMessage("The chore assignment for this week is as below:\n" + message)
+              sendMessage("The chore assignment for this week is as below:\n" + message)
 
     elif data['text'] == '/my chore':
         conn = create_conn()
