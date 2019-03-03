@@ -93,18 +93,19 @@ def webhook():
         cur = conn.cursor()
         members = getMembers()
         message = ''
-        for member in members:
-          query = "SELECT chore FROM chore_assignment WHERE name = '" + member + "'"
-          cur.execute(query)
-          results = cur.fetchall()
-          if not results:
-              sendMessage("No chores have been assigned yet.")
-          else:
-              message += member + ': '
-              for chore in results:
-                  message += chore[0] + '\n'
 
-              sendMessage("The chore assignment for this week is as below:\n" + message)
+        query = "SELECT chore FROM chore_assignment WHERE name = '" + member + "'"
+        cur.execute(query)
+        results = cur.fetchall()
+        if not results:
+            sendMessage("No chores have been assigned yet.")
+
+        for member in members:
+            message += member + ': '
+            for chore in results:
+                message += chore[0] + '\n'
+
+        sendMessage("The chore assignment for this week is as below:\n" + message)
 
     elif data['text'] == '/my chore':
         conn = create_conn()
