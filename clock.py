@@ -2,7 +2,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import requests
 import os
 import psycopg2
-from functions import create_conn, getMembers, increment, sendMessage
+from helper import create_conn, getMembers, increment, sendMessage
 
 def chore_switch():
     members = getMembers()

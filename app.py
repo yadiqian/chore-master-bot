@@ -3,7 +3,7 @@ import requests
 import os
 import psycopg2
 import random
-from functions import create_conn, getMembers, sendMessage
+from helper import create_conn, getMembers, sendMessage
 
 app = Flask(__name__)
 
