@@ -2,7 +2,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import requests
 import os
 import psycopg2
-from helper import create_conn, getMembers, increment, sendMessage
+from helper import create_conn, getMembers, increment 
 
 def chore_switch():
     members = getMembers()
@@ -68,8 +68,16 @@ def chore_switch():
 
     conn.close()
 
+def ping():
+    url = os.environ['SITE_URL']
+    try:
+        data = requests.get(url)
+    except:
+        print("Error.")
+
 if __name__ == '__main__':
     sched = BlockingScheduler(timezone='EST')
-    sched.add_job(chore_switch, 'cron', day_of_week='mon', hour=9)
+    sched.add_job(chore_switch, 'cron', day_of_week='tue', hour=22)
+    sched.add_job(ping, 'interval', seconds=600)
 
 sched.start()
