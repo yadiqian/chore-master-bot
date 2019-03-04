@@ -69,7 +69,4 @@ def chore_switch():
     conn.close()
 
 if __name__ == '__main__':
-    sched = BlockingScheduler(timezone='EST')
-    sched.add_job(chore_switch, 'cron', day_of_week='tue', hour=18)
-
-sched.start()
+    chore_switch()
