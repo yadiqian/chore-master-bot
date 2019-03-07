@@ -49,8 +49,23 @@ To change the number of helpers for a chore. It takes the ID of a chore and the 
 
 ### /show chore list
 
+The bot responds with a list of chores added when this command is used. 
 
+### /our chores
 
+The bot responds with chore assignment for the week.
+
+### /my chore
+
+The bot responds with chores assigned to the person who sends the command. 
+
+## Setup
+
+### Database Setup
+
+Create a table to store all the chores and a table for assignment. 
+
+```
 
 CREATE TABLE chores (
 	id serial PRIMARY KEY,
@@ -58,7 +73,12 @@ CREATE TABLE chores (
 	num_helper INT NOT NULL
 );
 
+```
+```
+
 CREATE TABLE chore_assignment (
 	name text NOT NULL,
 	chore text NOT NULL	
 );
+
+```
