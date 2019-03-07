@@ -2,6 +2,7 @@ import requests
 import os
 import psycopg2
 from helper import create_conn, getMembers, increment, sendMessage 
+import datetime
 
 def chore_switch():
     members = getMembers()
@@ -68,4 +69,8 @@ def chore_switch():
     conn.close()
 
 if __name__ == '__main__':
-    chore_switch()
+
+    today = datetime.datetime.today()
+    if today.weekday() == 3:
+        chore_switch()
+    
