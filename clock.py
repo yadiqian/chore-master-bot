@@ -1,14 +1,14 @@
 import requests
 import os
 import psycopg2
-from helper import create_conn, getMembers, increment, sendMessage 
+from helper import create_conn, getMembers, increment #, sendMessage 
 import datetime
 
 def chore_switch():
     members = getMembers()
     conn = create_conn()
     cur = conn.cursor()
-    query = "SELECT chore FROM chore_assignment"
+    query = "SELECT name FROM chore_assignment"
     cur.execute(query)
     past_assignment = cur.fetchall()
 
@@ -16,43 +16,47 @@ def chore_switch():
     cur.execute(query)
     chore_list = cur.fetchall()
 
-    if not past_assignment:
-        index = 0
-        for chore in chore_list:
-            name = chore[0]
-            num_helper = int(chore[1])
-            while num_helper > 0:
-                query = "INSERT INTO chore_assignment(name, chore) VALUES('" + members[index] + "', '" + name + "')"
-                cur.execute(query)
-                conn.commit()
-                index = increment(index, len(members))
-                num_helper -= 1 
+    if past_assignment:
+        # if a member from the previous week's assignment is still in the chat, add that member to curMembers
+        curMembers = []
+        for person in past_assignment:
+            if person[0] in members:
+                curMembers.append(person[0])
 
-    else:
-        list = []
-        for chore in past_assignment:
-            list.append(chore[0])
-        current = []
-        for chore in chore_list:
-            current.append(chore[0])
-            if chore[0] not in list:
-                num = int(chore[1])
-                while num > 0:
-                    list.append(chore[0])
-        item = list[0]
-        list.remove(item)
-        list.append(item)
+        # remove duplicates
+        members = []
+        for person in curMembers:
+            if person not in members:
+                members.append(person)
+
+        # reorder curMember list
+        member = members[0]
+        members.remove(member)
+        members.append(member)
 
         query = "DELETE FROM chore_assignment"
         cur.execute(query)
         conn.commit()
 
-        index = 0
-        for chore in list:
-            query = "INSERT INTO chore_assignment(name, chore) VALUES('" + members[index] + "', '" + chore + "')"
+
+    index = 0
+    count = 0
+    for chore in chore_list:
+        name = chore[0]
+        num_helper = int(chore[1])
+        count += num_helper
+        while num_helper > 0:
+            query = "INSERT INTO chore_assignment(name, chore) VALUES('" + members[index] + "', '" + name + "')"
             cur.execute(query)
             conn.commit()
             index = increment(index, len(members))
+            num_helper -= 1 
+    while count % len(members):
+        query = "INSERT INTO chore_assignment(name, chore) VALUES('" + members[index] + "', 'NULL')"
+        cur.execute(query)
+        conn.commit()
+        index = increment(index, len(members))
+        count += 1
 
     message = ''
     for member in members:
@@ -63,7 +67,8 @@ def chore_switch():
         for chore in results:
             message += chore[0] + '\n'
 
-    sendMessage("The chore assignment for this week is as below:\n" + message)
+    #sendMessage("The chore assignment for this week is as below:\n" + message)
+    print(message)
 
 
     conn.close()
@@ -71,6 +76,6 @@ def chore_switch():
 if __name__ == '__main__':
 
     today = datetime.datetime.today()
-    if today.weekday() == 3:
+    if today.weekday() == 3:  #Wednesday 0->sunday
         chore_switch()
     
