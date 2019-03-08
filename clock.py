@@ -1,7 +1,7 @@
 import requests
 import os
 import psycopg2
-from helper import create_conn, getMembers, increment #, sendMessage 
+from helper import create_conn, getMembers, increment, sendMessage 
 import datetime
 
 def chore_switch():
@@ -67,9 +67,7 @@ def chore_switch():
         for chore in results:
             message += chore[0] + '\n'
 
-    #sendMessage("The chore assignment for this week is as below:\n" + message)
-    print(message)
-
+    sendMessage("The chore assignment for this week is as below:\n" + message)
 
     conn.close()
 
