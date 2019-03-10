@@ -74,6 +74,6 @@ def chore_switch():
 if __name__ == '__main__':
 
     today = datetime.datetime.today()
-    if today.weekday() == 5:  #friday 0->sunday
+    if today.weekday() == 0:  #sunday
         chore_switch()
     
